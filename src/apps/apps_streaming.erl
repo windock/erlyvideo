@@ -131,7 +131,10 @@ play(#amf{args = [_Null, {boolean, false} | _]} = AMF, State) -> stop(AMF, State
 play(AMF, #rtmp_client{video_player = Player} = State) ->
   StreamId = 1,
   Channel = #channel{id = 5, timestamp = 0, stream = StreamId},
-  [_Null,{string,Name}] = AMF#amf.args,
+  case AMF#amf.args of
+    [_Null, {string, Name}] -> ok;
+    [_Null, {string, Name}, {number, _DoNotKnowWhatItIsButRed5DemosSendIt}] -> ok
+  end,
   ?D({"invoke - play", Name, AMF}),
   case Player of
     undefined -> ok;
